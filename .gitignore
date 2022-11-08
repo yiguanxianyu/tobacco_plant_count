@@ -131,3 +131,5 @@ dmypy.json
 why/*
 data/*
 *.DS_Store
+image_process/pred.tif
+image_process/raw.tif
