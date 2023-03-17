@@ -1,4 +1,3 @@
 {
     "python.analysis.typeCheckingMode": "basic",
-    "terminal.integrated.defaultProfile.windows": "miniconda3-ps"
 }
