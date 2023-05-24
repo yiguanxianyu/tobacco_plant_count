@@ -1,10 +1,19 @@
-from osgeo import gdal, ogr, osr
 import json
-from pathlib import Path
 from multiprocessing import Pool
+from pathlib import Path
+
+from osgeo import gdal, ogr, osr
 
 
 def polygonize(source_path: Path | str, target_path: Path | str) -> None:
+    """
+    Polygonize a raster image and save the result as a shapefile.
+
+    :param source_path: A string or Path object pointing to the input raster image
+    :param target_path: A string or Path object pointing to the output shapefile
+    :return: None
+    """
+
     sp_ref = osr.SpatialReference()
     sp_ref.SetFromUserInput('EPSG:4326')
 
@@ -24,21 +33,21 @@ def polygonize(source_path: Path | str, target_path: Path | str) -> None:
     gdal.Polygonize(source_band, mask_band_nodata, dst_layer, dst_field, [], callback=None)
 
 
-def mp_wrapper(source_path: Path, output_path: Path):
+def mp_wrapper(source_path: Path, output_path: Path) -> None:
     target_path = output_path / f'{source_path.name[:-4]}_polygonized.shp'
     polygonize(source_path, target_path)
 
 
 if __name__ == '__main__':
     env = json.load(open(r'C:/Users/xianyu/GraduationProject/env.json'))
-    input_path = Path(env['output_dir']) / '1_opening'
-    output_path = Path(env['output_dir']) / '2_polygonize'
+    base_dir = Path(env['output_dir'])
+    input_path = Path(base_dir) / '1_opening'
+    output_path = Path(base_dir) / '2_polygonize'
 
     pool = Pool(16)  # 创建进程池
 
     for source_path in input_path.rglob('*.tif'):
-        args = (source_path, output_path)
-        pool.apply_async(func=mp_wrapper, args=args)
+        pool.apply_async(func=mp_wrapper, args=(source_path, output_path))
 
     pool.close()
     pool.join()

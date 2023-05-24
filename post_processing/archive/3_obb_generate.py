@@ -1,8 +1,9 @@
-import geopandas as gpd
 import json
-from pathlib import Path
-from shapely.geometry import Polygon
 from multiprocessing import Pool
+from pathlib import Path
+
+import geopandas as gpd
+from shapely.geometry import Polygon
 
 
 def genrate_obb(source_path, target_path):

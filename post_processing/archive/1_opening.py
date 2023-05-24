@@ -1,9 +1,10 @@
+import json
+from multiprocessing import Pool
+from pathlib import Path
+
 import cv2 as cv
 import numpy as np
 from osgeo import gdal
-import json
-from pathlib import Path
-from multiprocessing import Pool
 
 
 def morph_open(img, kernel_size):
